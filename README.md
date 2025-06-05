@@ -1,51 +1,58 @@
 # Tech Trend Bot
 
-테크 트렌드 커피챗 내용을 자동으로 요약하고 공유하는 봇입니다.
+A bot that automatically summarizes **Tech Trend Coffee Chat** content and shares the summary via **Slack**.
 
-## 기능
+---
 
-- Notion에서 커피챗 내용을 가져옴
-- OpenAI GPT를 사용하여 내용을 요약
-- 요약된 내용을 Slack으로 공유
-- MongoDB에 요약 내용 저장
+## Features
 
-## 실행 환경
+- Fetches content from **Notion**
+- Summarizes it using **OpenAI GPT-4o model**
+- Shares the summary in **Slack**
+- Saves the summary to **MongoDB**
 
-- Python 3.11+
-- GitHub Actions (크론 작업)
+---
 
-## 설정 방법
+## Runtime Environment
 
-1. 환경 변수 설정
-   - `OPENAI_API_KEY`: OpenAI API 키
-   - `NOTION_API_KEY`: Notion API 키
-   - `NOTION_DATABASE_ID`: Notion 데이터베이스 ID
-   - `SLACK_WEBHOOK_ALL_SHARE`: Slack 웹훅 URL (전체 공유용)
-   - `SLACK_WEBHOOK_JARVIS_TEST`: Slack 웹훅 URL (테스트용)
-   - `MONGODB_CONNECTION_STRING`: MongoDB 연결 문자열
+- Python **3.11+**
+- GitHub Actions (**scheduled job** support)
 
-2. GitHub Actions 설정
-   - 저장소의 Settings > Secrets and variables > Actions에서 위의 환경 변수들을 시크릿으로 추가
+---
 
-## 실행 스케줄
+## Setup
 
-- 매주 수요일 오후 2시 (KST)에 자동 실행
-- GitHub Actions 페이지에서 수동 실행도 가능
+### 1. Environment Variables
 
-## 로컬 실행 방법
+Set the following as **GitHub Actions secrets** or in a local `.env` file:
 
-1. 의존성 설치
-   ```bash
-   pip install -r requirements.txt
-   ```
+| Variable | Description |
+|----------|-------------|
+| `OPENAI_API_KEY` | OpenAI API key |
+| `NOTION_API_KEY` | Notion API key |
+| `NOTION_DATABASE_ID` | Notion database ID |
+| `SLACK_WEBHOOK_ALL_SHARE` | Slack webhook URL (public share) |
+| `SLACK_WEBHOOK_JARVIS_TEST` | Slack webhook URL (test channel) |
+| `MONGODB_CONNECTION_STRING` | MongoDB connection string |
 
-2. .env 파일 생성 및 환경 변수 설정
-   ```bash
-   cp .env.example .env
-   # .env 파일을 편집하여 필요한 값들을 설정
-   ```
+### 2. GitHub Actions Secrets
 
-3. 실행
-   ```bash
-   python main.py
-   ```
+Go to:  
+**Repository → Settings → Secrets and variables → Actions**  
+Add each variable listed above as a **secret**.
+
+---
+
+## Execution Schedule
+
+- Runs **automatically** every **Wednesday at 1:00 PM KST**
+- Can be **manually triggered** via GitHub Actions UI
+
+---
+
+## Local Development
+
+### 1. Install Dependencies
+
+```bash
+pip install -r requirements.txt
