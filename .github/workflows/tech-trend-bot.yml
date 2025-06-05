@@ -1,0 +1,36 @@
+name: Tech Trend Bot
+
+on:
+  schedule:
+    # 매주 수요일 오후 2시 (KST = UTC+9)에 실행
+    - cron: '0 4 * * 3'  # UTC 기준 수요일 04:00 (한국 시간 13:00)
+  workflow_dispatch:  # 수동 실행 옵션
+
+jobs:
+  run-tech-trend-bot:
+    runs-on: ubuntu-latest
+    
+    # 현재 레파지토리 체크아웃
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Run tech trend bot
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+        NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+        SLACK_WEBHOOK_ALL_SHARE: ${{ secrets.SLACK_WEBHOOK_ALL_SHARE }}
+        SLACK_WEBHOOK_JARVIS_TEST: ${{ secrets.SLACK_WEBHOOK_JARVIS_TEST }}
+        MONGODB_CONNECTION_STRING: ${{ secrets.MONGODB_CONNECTION_STRING }}
+      run: |
+        python main.py 
