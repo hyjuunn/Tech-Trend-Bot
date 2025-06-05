@@ -12,6 +12,7 @@ from app.storage.mongo import insert_summary_to_db
 from app.slack.notifier import format_blocks_from_text, post_to_slack
 from app.config.settings import SLACK_WEBHOOK_JARVIS_TEST
 
+
 # 로그 디렉토리 생성
 if not os.path.exists('logs'):
     os.makedirs('logs')
@@ -122,7 +123,8 @@ def main(start_date: Optional[Union[str, date]] = None, end_date: Optional[Union
 if __name__ == "__main__":
     try:
         # 기본: 이번주 데이터
-        main()
+        # 특정 날짜 설정시 main("YYYY-MM-DD", "YYYY-MM-DD")
+        main("2025-03-18", "2025-03-20")
         
     except Exception as e:
         logger.error("프로그램 종료 with 에러", exc_info=True)

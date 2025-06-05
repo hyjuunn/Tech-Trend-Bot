@@ -6,6 +6,7 @@ from app.config.settings import SLACK_WEBHOOK_JARVIS_TEST
 from app.summarizer.formatter import format_summary_to_slack_message
 
 
+# 텍스트를 슬랙 블록 형식으로 변환
 def format_blocks_from_text(text: str) -> Dict[str, List[Dict[str, Any]]]:
     lines = text.strip().split("\n")
     blocks: List[Dict[str, Any]] = []
@@ -78,6 +79,7 @@ def format_blocks_from_text(text: str) -> Dict[str, List[Dict[str, Any]]]:
     return {"blocks": blocks}
 
 
+# Slack 메시지 전송
 def post_to_slack(webhook_url: str, message: Dict[str, Any]) -> bool:
     try:
         response = requests.post(
@@ -92,6 +94,7 @@ def post_to_slack(webhook_url: str, message: Dict[str, Any]) -> bool:
         raise Exception(f"Slack 전송 실패: {str(e)}")
 
 
+# 테스트용
 def main() -> None:
     with open("formatted_summary.json", "r", encoding="utf-8") as f:
         summary_json = json.load(f)

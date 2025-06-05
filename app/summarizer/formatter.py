@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import List, Dict
 import json
 
+
 # 커피챗 요약 텍스트를 JSON 형식으로 변환 (DB 저장용)
 def format_summary_to_json(raw_text: str) -> Dict:
     date_match = re.search(r"(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일", raw_text)
@@ -29,7 +30,7 @@ def format_summary_to_json(raw_text: str) -> Dict:
             if not lines:
                 continue
 
-            # 타이틀, 링크, 불릿 분리
+            # 타이틀, 링크, 포인트 분리
             title_line = lines[0].strip()
             link_lines = [line for line in lines[1:] if line.startswith("<http") or line.startswith("http")]
             bullet_lines = [line.strip("- ").strip() for line in lines[1:] if not line.startswith("<http") and not line.startswith("http")]
@@ -53,6 +54,7 @@ def format_summary_to_json(raw_text: str) -> Dict:
         "createdAt": datetime.now().isoformat()
     }
 
+# JSON 파일로 저장 (테스트용)
 def save_json_to_file(json_data: dict, file_path = "formatted_summary.json"):
     try:
         with open(file_path, "w", encoding = "utf-8") as f:
@@ -60,6 +62,7 @@ def save_json_to_file(json_data: dict, file_path = "formatted_summary.json"):
         print(f"JSON 파일이 {file_path}에 저장되었습니다")
     except Exception as e:
         print(f"저장 오류: {str(e)}")
+
 
 # 커피챗 요약 텍스트를 슬랙 메시지 형식으로 변환
 def format_summary_to_slack_message(summary_json: dict) -> str:
@@ -94,6 +97,8 @@ def format_summary_to_slack_message(summary_json: dict) -> str:
         lines.append("")
     return "\n".join(lines).strip()
 
+
+# 테스트용
 def main():
     with open("coffee_chat_summary.txt", "r", encoding = "utf-8") as f:
         raw_text = f.read()

@@ -6,15 +6,17 @@ from typing import Dict
 
 from app.config.settings import OPENAI_API_KEY
 
+
 logger = logging.getLogger('tech_trend_bot')
 
+# Openai 클라이언트 초기화
 def initialize_client():
-    """OpenAI 클라이언트 초기화"""
     api_key = OPENAI_API_KEY
     if not api_key:
         raise ValueError("OPENAI_API_KEY가 환경 변수에 없습니다")
     return OpenAI(api_key=api_key, timeout=60.0)
 
+# 프롬프트 생성
 def generate_prompt(content: str) -> Dict[str, str]:
     SYSTEM_PROMPT = """
 [역할]
@@ -80,8 +82,8 @@ def generate_prompt(content: str) -> Dict[str, str]:
         "user": USER_PROMPT
     }
 
+# GPT 호출 / 요약 생성
 def get_summary(client, prompts: Dict[str, str]) -> str:
-    """GPT API를 호출하여 요약 생성"""
     retry_count = 0
     max_retries = 3
     base_delay = 1

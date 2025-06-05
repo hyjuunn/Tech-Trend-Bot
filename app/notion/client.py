@@ -9,13 +9,14 @@ notion = Client(auth = NOTION_API_KEY)
 # Notion Database ID
 DATABASE_ID = NOTION_DATABASE_ID
 
+# database_id 로 조회
 def get_database(database_id):
     return notion.databases.query(database_id=database_id)
 
+# 특정 날짜 범위의 데이터베이스 조회
 def get_filtered_database(database_id, start_date=None, end_date=None):
-    """지정된 날짜 범위의 데이터베이스 조회"""
     if not start_date:
-        # 기본값: 이번주 월-금
+        # 기본설정값: 해당 주 월-금
         today = date.today()
         start_date = today - timedelta(days=today.weekday())
         end_date = start_date + timedelta(days=4)
@@ -24,6 +25,7 @@ def get_filtered_database(database_id, start_date=None, end_date=None):
     start_date_str = start_date.isoformat() if isinstance(start_date, date) else start_date
     end_date_str = end_date.isoformat() if isinstance(end_date, date) else end_date
 
+    # 필터링 -> 조회
     response = notion.databases.query(
         database_id=database_id,
         filter={
@@ -62,8 +64,8 @@ def get_page_blocks(page_id):
 
     return blocks
 
+# 특정 날짜 범위의 페이지 블록 리스트 추출
 def get_pages_blocks_by_date(database_id, start_date=None, end_date=None):
-    """특정 날짜 범위의 페이지 블록 리스트 추출"""
     entry = get_filtered_database(database_id, start_date, end_date)
     result = []
 

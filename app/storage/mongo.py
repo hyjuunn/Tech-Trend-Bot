@@ -5,6 +5,8 @@ from datetime import datetime
 from typing import Dict, Any, Optional, Union
 from datetime import date
 
+
+# 요약본을 DB에 저장
 def insert_summary_to_db(summary_data: Dict[str, Any]) -> bool:
     client: Optional[MongoClient] = None
     try:

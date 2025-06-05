@@ -2,21 +2,22 @@ from app.notion.client import notion, get_pages_blocks_by_date
 from typing import List, Dict, Any
 import logging
 
+
 logger = logging.getLogger('tech_trend_bot')
 
+# 노션 블록을 파싱하여 텍스트 형식으로 변환
 def parse_notion_blocks(blocks: List[Dict[str, Any]], indent_level: int = 0) -> List[str]:
-    """
-    노션 블록을 파싱하여 텍스트 형식으로 변환
-    """
     parsed_blocks = []
     list_buffer = []
     list_type = None
 
+    # 리스트 버퍼 처리
     def flush_list():
         nonlocal list_buffer, list_type
         if not list_buffer:
             return
 
+        # 리스트 타입별 처리
         if list_type == "bulleted_list_item":
             for item in list_buffer:
                 marker = "->" * indent_level + "" if indent_level > 0 else "-"
@@ -33,10 +34,13 @@ def parse_notion_blocks(blocks: List[Dict[str, Any]], indent_level: int = 0) -> 
         list_buffer = []
         list_type = None
 
+    # 블록 텍스트 추출
     def extract_text(block: Dict[str, Any]) -> str:
+        # 블록에서 'rich_text' 키의 값을 추출
         text_objects = block.get("rich_text", [])
+        # rich_text 배열에서 'plain_text' 값을 추출
         return " ".join(t.get("plain_text", "") for t in text_objects if isinstance(t, dict)).strip()
-
+    
     for block in blocks:
         if not isinstance(block, dict):
             continue
@@ -47,6 +51,7 @@ def parse_notion_blocks(blocks: List[Dict[str, Any]], indent_level: int = 0) -> 
         if not content:
             continue
 
+        # 블록 타입별 처리
         if block_type in ["paragraph", "quote"]:
             flush_list()
             if block_type == "quote":
@@ -71,6 +76,7 @@ def parse_notion_blocks(blocks: List[Dict[str, Any]], indent_level: int = 0) -> 
             }.get(block_type, "##")
             parsed_blocks.append(f"{heading_prefix} {content}")
 
+        # 하위 블록 처리
         if block.get("has_children"):
             try:
                 child_blocks = notion.blocks.children.list(
@@ -87,8 +93,8 @@ def parse_notion_blocks(blocks: List[Dict[str, Any]], indent_level: int = 0) -> 
     flush_list()
     return parsed_blocks
 
+# 특정 날짜 범위의 노션 블록 파싱
 def parse_notion_blocks_by_date(database_id: str, start_date=None, end_date=None) -> List[Dict[str, Any]]:
-    """특정 날짜 범위의 노션 블록 파싱"""
     pages = get_pages_blocks_by_date(database_id, start_date, end_date)
     parsed = []
     for page in pages:
@@ -100,6 +106,7 @@ def parse_notion_blocks_by_date(database_id: str, start_date=None, end_date=None
         })
     return parsed
 
+# 파싱된 노션 블록을 텍스트 형식으로 변환
 def convert_parsed_page_to_text(parsed_page: Dict[str, Any]) -> str:
     lines = parsed_page.get("parsed_content", [])
     result = []
@@ -147,5 +154,6 @@ def convert_parsed_page_to_text(parsed_page: Dict[str, Any]) -> str:
     flush_article()
     return "\n".join(result)
 
+# 모든 파싱된 노션 블록을 텍스트 형식으로 변환
 def convert_all_parsed_pages_to_text(parsed_pages: List[Dict[str, Any]]) -> List[str]:
     return [convert_parsed_page_to_text(page) for page in parsed_pages]
