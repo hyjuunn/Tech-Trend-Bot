@@ -124,7 +124,8 @@ if __name__ == "__main__":
     try:
         # 기본: 이번주 데이터
         # 특정 날짜 설정시 main("YYYY-MM-DD", "YYYY-MM-DD")
-        main("2025-03-18", "2025-03-20")
+        # main("2025-03-18", "2025-03-20")
+        main()
         
     except Exception as e:
         logger.error("프로그램 종료 with 에러", exc_info=True)
