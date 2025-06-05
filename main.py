@@ -122,7 +122,7 @@ def main(start_date: Optional[Union[str, date]] = None, end_date: Optional[Union
 if __name__ == "__main__":
     try:
         # 기본: 이번주 데이터
-        main("2025-03-25", "2025-03-27")
+        main()
         
     except Exception as e:
         logger.error("프로그램 종료 with 에러", exc_info=True)
