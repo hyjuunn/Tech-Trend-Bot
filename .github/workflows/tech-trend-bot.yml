@@ -1,9 +1,9 @@
 name: Tech Trend Bot
 
 on:
-  schedule:
-    # 매주 수요일 오후 2시 (KST = UTC+9)에 실행
-    - cron: '0 4 * * 3'  # UTC 기준 수요일 04:00 (한국 시간 13:00)
+  # schedule:
+  #   # 매주 수요일 오후 2시 (KST = UTC+9)에 실행
+  #   - cron: '0 4 * * 3'  # UTC 기준 수요일 04:00 (한국 시간 13:00)
   workflow_dispatch:  # 수동 실행 옵션
 
 jobs:
